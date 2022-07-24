@@ -1,7 +1,6 @@
 import throttle from "lodash.throttle"
 
 const formRef = document.querySelector(".feedback-form")
-const formData = new FormData(formRef)
 const FEEDBACK_FORM_KEY = "feedback-form-state"
 
 updateForm()
@@ -25,6 +24,7 @@ function updateForm() {
 }
 
 function saveFormDataToLocalStorage() {
+    const formData = new FormData(formRef)
     new FormData(formRef).forEach((value, name) => {
         formData[name] = value
         localStorage.setItem(FEEDBACK_FORM_KEY, JSON.stringify(formData))
@@ -33,6 +33,13 @@ function saveFormDataToLocalStorage() {
 
 function showFormDataAndResetForm(event) {
     event.preventDefault()
+    const { elements: { email, message } } = event.currentTarget
+    if (email.value === "" || message.value === "") return alert("Should be fill every fields!!!")
+    
+    const formData = {
+        email: email.value,
+        message: message.value,
+    }
 
     console.log(formData)
     localStorage.removeItem(FEEDBACK_FORM_KEY)
